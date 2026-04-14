@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Letter For You 💌</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --sky: #b8d8f0;
+  --env-body: #5b9fd4;
+  --env-left: #4a8ec0;
+  --env-right: #4a8ec0;
+  --env-bottom: #3f7eb0;
+  --env-top: #6eb0e0;
+  --seal: #2e6ea0;
+  --seal-border: #90c8f0;
+  --blue-dark: #2a5f90;
+  --blue-mid: #4a85b8;
+  --blue-light: #80b4d8;
+}
+
+html, body { min-height: 100%; width: 100%; overflow-x: hidden; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background-color: var(--sky);
+  background-image:
+    repeating-linear-gradient(0deg,   rgba(255,255,255,0.22) 0px, rgba(255,255,255,0.22) 26px, transparent 26px, transparent 52px),
+    repeating-linear-gradient(90deg,  rgba(255,255,255,0.22) 0px, rgba(255,255,255,0.22) 26px, transparent 26px, transparent 52px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px 12px 32px;
+  position: relative;
+}
+
+/* ── Sparkles ── */
+.sparkle-container { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.sparkle {
+  position: absolute; border-radius: 50%;
+  background: rgba(255,255,255,0.85);
+  animation: sparkleRise linear infinite;
+}
+@keyframes sparkleRise {
+  0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+  10%  { opacity: 0.8; }
+  90%  { opacity: 0.25; }
+  100% { transform: translateY(-60px) scale(1.1); opacity: 0; }
+}
+
+/* ── Stage ── */
+.stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10;
+  width: 100%;
+  max-width: 340px;
+}
+
+/* ── LETTER CARD ── */
+.letter-wrapper {
+  width: 300px;
+  position: relative;
+  z-index: 50;
+  opacity: 0;
+  transform: translateY(-30px) scale(0.96);
+  pointer-events: none;
+  max-height: 0;
+  overflow: visible;
+  transition:
+    opacity 0.6s cubic-bezier(0.34,1.3,0.64,1),
+    transform 0.6s cubic-bezier(0.34,1.3,0.64,1),
+    max-height 0.7s ease,
+    margin-bottom 0.5s ease;
+  margin-bottom: 0;
+}
+.letter-wrapper.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+  max-height: 560px;
+  margin-bottom: 16px;
+}
+
+.letter-card {
+  background: #eaf4fd;
+  border-radius: 18px;
+  border: 2.5px dashed var(--blue-light);
+  box-shadow: 0 8px 32px rgba(60,120,200,0.18), 0 2px 8px rgba(60,120,200,0.10);
+  position: relative;
+  overflow: visible;
+}
+.letter-card::before {
+  content: '';
+  display: block;
+  height: 5px;
+  background: linear-gradient(90deg, #90c4f0, #5aaee0, #b8dcfc, #5aaee0, #90c4f0);
+  border-radius: 16px 16px 0 0;
+}
+
+.letter-inner {
+  padding: 14px 18px 16px;
+  max-height: 380px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--blue-light) transparent;
+}
+.letter-inner::-webkit-scrollbar { width: 4px; }
+.letter-inner::-webkit-scrollbar-thumb { background: var(--blue-light); border-radius: 4px; }
+
+.letter-plane {
+  position: absolute;
+  top: -18px; right: -10px;
+  width: 40px; height: 28px;
+  z-index: 60;
+  animation: planeBob 2.5s ease-in-out infinite;
+}
+@keyframes planeBob {
+  0%,100% { transform: translateY(0) rotate(-5deg); }
+  50%      { transform: translateY(-5px) rotate(4deg); }
+}
+.letter-plane .bf-wing {
+  animation: bfDeco 0.28s ease-in-out infinite alternate;
+  transform-origin: center;
+}
+@keyframes bfDeco { 0%{transform:scaleX(1)} 100%{transform:scaleX(0.15)} }
+.letter-heart-deco { position: absolute; top: 8px; right: 58px; font-size: 8px; color: var(--blue-mid); }
+
+.letter-greeting {
+  font-family: 'Dancing Script', cursive;
+  font-size: 22px; font-weight: 700;
+  color: var(--blue-dark);
+  margin-bottom: 10px;
+}
+.letter-body { font-size: 12.5px; color: #3a6585; line-height: 1.85; font-weight: 500; }
+.letter-body p { margin-bottom: 9px; }
+.letter-highlight { font-weight: 700; font-size: 14px; color: var(--blue-dark); }
+.letter-closing {
+  font-family: 'Dancing Script', cursive;
+  font-size: 15px; color: var(--blue-mid);
+  text-align: right; margin-top: 10px; line-height: 1.6;
+  border-top: 1px dashed #b0cce0; padding-top: 8px;
+}
+.letter-closing .sig { font-size: 18px; color: var(--blue-dark); }
+
+.scroll-hint {
+  text-align: center; font-size: 10px; color: var(--blue-light);
+  padding: 4px 0 8px; letter-spacing: 0.05em;
+  animation: scrollBlink 2s ease-in-out infinite;
+  transition: opacity 0.3s;
+}
+@keyframes scrollBlink { 0%,100%{opacity:.4} 50%{opacity:1} }
+
+/* ── ENVELOPE ── */
+.envelope-wrap { position: relative; width: 300px; }
+
+.envelope-svg {
+  width: 300px;
+  height: 200px;
+  display: block;
+  filter: drop-shadow(0 8px 20px rgba(40,100,180,0.28)) drop-shadow(0 2px 6px rgba(40,100,180,0.18));
+  transition: filter 0.4s ease;
+  overflow: visible;
+}
+.envelope-wrap.open .envelope-svg {
+  filter: drop-shadow(0 14px 32px rgba(40,120,200,0.36)) drop-shadow(0 4px 10px rgba(40,100,180,0.22));
+}
+
+/* flap rotation */
+.env-flap-top {
+  transform-origin: 150px 0px;
+  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.envelope-wrap.open .env-flap-top {
+  transform: rotateX(200deg);
+}
+
+/* ── HEART SEAL ── */
+.seal {
+  position: absolute;
+  bottom: -24px; left: 50%; transform: translateX(-50%);
+  width: 46px; height: 46px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #6ec0ec, var(--seal));
+  border: 3px solid var(--seal-border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 30;
+  animation: sealPulse 1.4s ease-in-out infinite;
+  transition: filter 0.2s;
+  box-shadow: 0 4px 18px rgba(60,140,220,0.45);
+  user-select: none;
+}
+.seal:hover { filter: brightness(1.15); }
+.seal:active { transform: translateX(-50%) scale(0.88) !important; }
+.seal svg { width: 20px; height: 20px; fill: white; pointer-events: none; }
+@keyframes sealPulse {
+  0%,100% { box-shadow: 0 4px 18px rgba(60,140,220,0.45), 0 0 0 0 rgba(100,180,240,0.4); }
+  50%      { box-shadow: 0 4px 26px rgba(60,140,220,0.6), 0 0 0 7px rgba(100,180,240,0); }
+}
+
+/* tap hint */
+.tap-hint {
+  position: absolute; bottom: -52px; left: 50%; transform: translateX(-50%);
+  font-size: 10px; color: rgba(60,120,180,0.6); letter-spacing: 0.08em;
+  font-weight: 600; white-space: nowrap;
+  animation: hintFade 2s ease-in-out infinite; pointer-events: none;
+}
+@keyframes hintFade { 0%,100%{opacity:.4} 50%{opacity:1} }
+.tap-hint.hide { display: none; }
+
+/* ── TULIPS ── */
+.tulips { display: flex; align-items: flex-end; margin-top: 32px; gap: 2px; position: relative; z-index: 5; }
+.tl      { animation: tsway 2.8s ease-in-out infinite; transform-origin: bottom center; }
+.tl.t2   { animation-delay: 0.7s; }
+.tl.t3   { animation-delay: 0.35s; }
+@keyframes tsway { 0%,100%{transform:rotate(-3deg)} 50%{transform:rotate(3deg)} }
+
+/* ── BUTTERFLIES ── */
+.butterfly { position: fixed; pointer-events: none; z-index: 200; }
+.bwing { animation: bflyFlap 0.22s ease-in-out infinite alternate; transform-origin: center; }
+@keyframes bflyFlap { 0%{transform:scaleX(1)} 100%{transform:scaleX(0.18)} }
+
+/* ── PARTICLES ── */
+.pt { position: fixed; border-radius: 50%; pointer-events: none; z-index: 999; animation: ptBurst 0.9s ease-out forwards; }
+@keyframes ptBurst { 0%{opacity:1;transform:translate(0,0) scale(1)} 100%{opacity:0;transform:var(--tx) scale(0.1)} }
+</style>
+</head>
+<body>
+
+<div class="sparkle-container" id="sparkles"></div>
+
+<div class="stage">
+
+  <!-- LETTER -->
+  <div class="letter-wrapper" id="letterWrapper">
+      <div class="letter-plane"><svg viewBox="0 0 60 40" width="40" height="28" xmlns="http://www.w3.org/2000/svg"><g class="bf-wing"><ellipse cx="18" cy="14" rx="15" ry="10" fill="#7abce8" opacity="0.9" transform="rotate(-18 18 14)"/><ellipse cx="16" cy="27" rx="11" ry="6.5" fill="#4a90d0" opacity="0.85" transform="rotate(12 16 27)"/><ellipse cx="42" cy="14" rx="15" ry="10" fill="#7abce8" opacity="0.9" transform="rotate(18 42 14)"/><ellipse cx="44" cy="27" rx="11" ry="6.5" fill="#4a90d0" opacity="0.85" transform="rotate(-12 44 27)"/><ellipse cx="20" cy="13" rx="6" ry="3.5" fill="#c8e8fc" opacity="0.5" transform="rotate(-18 20 13)"/><ellipse cx="40" cy="13" rx="6" ry="3.5" fill="#c8e8fc" opacity="0.5" transform="rotate(18 40 13)"/></g><ellipse cx="30" cy="20" rx="2" ry="9" fill="#2a5f90" opacity="0.85"/><line x1="30" y1="11" x2="23" y2="3" stroke="#2a5f90" stroke-width="1" opacity="0.7"/><line x1="30" y1="11" x2="37" y2="3" stroke="#2a5f90" stroke-width="1" opacity="0.7"/><circle cx="23" cy="3" r="1.5" fill="#5aaee0"/><circle cx="37" cy="3" r="1.5" fill="#5aaee0"/></svg></div>
+    <div class="letter-card">
+      <div class="letter-inner" id="letterInner">
+        <p class="letter-greeting">Hey, you... 🌸</p>
+        <div class="letter-body">
+          <p>I've been trying to find the right words for a while now, but maybe there are no perfect words — only honest ones.</p>
+          <p>Every time I see you, something in me gets a little brighter. You have this way of making ordinary moments feel like something worth remembering.</p>
+          <p>I like how you laugh at your own jokes before you even finish them. I like how you get excited about small things. I like that you exist in the same world I do.</p>
+          <p>I don't know what you'll say after reading this, and honestly, that's terrifying. But I'd rather be brave for a moment than stay quiet forever.</p>
+          <p>So here it is — as clearly as I know how to say it:</p>
+          <p class="letter-highlight">I like you. A lot. 💙</p>
+          <p>And I thought you should know.</p>
+          <p>Every single day I find another reason to smile because of you. The way you carry yourself, the way you care — it all means the world to me. I hope this letter reaches your heart the way you've reached mine.</p>
+        </div>
+        <p class="letter-closing">
+          With all my heart,<br>
+          <span class="sig">Someone who cares ♡</span>
+        </p>
+      </div>
+      <p class="scroll-hint" id="scrollHint">↓ scroll to read more ↓</p>
+    </div>
+  </div>
+
+  <!-- ENVELOPE -->
+  <div class="envelope-wrap" id="envelopeWrap">
+    <!-- SVG envelope: body + side flaps + bottom flap + top flap (animated) -->
+    <svg class="envelope-svg" id="envelope" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="envInner" x="-5%" y="-5%" width="110%" height="110%">
+          <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="rgba(30,80,150,0.18)"/>
+        </filter>
+      </defs>
+
+      <!-- envelope body -->
+      <rect x="0" y="0" width="300" height="200" rx="6" ry="6" fill="#5b9fd4"/>
+
+      <!-- left triangle flap -->
+      <polygon points="0,0 0,200 148,108" fill="#4a8ec0"/>
+      <!-- right triangle flap -->
+      <polygon points="300,0 300,200 152,108" fill="#4a8ec0"/>
+      <!-- bottom triangle flap -->
+      <polygon points="0,200 300,200 150,108" fill="#3f7eb0"/>
+
+      <!-- subtle crease lines -->
+      <line x1="0" y1="200" x2="150" y2="108" stroke="rgba(30,70,130,0.18)" stroke-width="0.8"/>
+      <line x1="300" y1="200" x2="150" y2="108" stroke="rgba(30,70,130,0.18)" stroke-width="0.8"/>
+
+      <!-- top diamond flap (rotates open) — pointed downward like real envelope -->
+      <g class="env-flap-top" id="envFlap">
+        <polygon points="0,0 300,0 150,115" fill="#6eb0e0"/>
+        <!-- subtle highlight on flap edge -->
+        <line x1="0" y1="0" x2="150" y2="115" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+        <line x1="300" y1="0" x2="150" y2="115" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+      </g>
+
+      <!-- top edge highlight -->
+      <line x1="4" y1="1" x2="296" y2="1" stroke="rgba(255,255,255,0.22)" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+
+    <!-- Heart seal -->
+    <div class="seal" id="seal" onclick="openEnvelope()">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+      </svg>
+    </div>
+    <div class="tap-hint" id="tapHint">tap the heart ♡</div>
+  </div>
+
+  <!-- TULIPS -->
+  <div class="tulips">
+    <svg class="tl t2"   width="28" height="52" viewBox="0 0 44 72"><line x1="22" y1="38" x2="22" y2="72" stroke="#80bc94" stroke-width="2.5"/><path d="M22 38 Q15 30 15 19 Q15 9 22 11 Q29 9 29 19 Q29 30 22 38Z" fill="#a8cef4" stroke="#6aa8e0" stroke-width="1.2"/><path d="M22 50 Q17 46 17 56" stroke="#80bc94" stroke-width="1.8" fill="none"/></svg>
+    <svg class="tl"      width="28" height="62" viewBox="0 0 44 72"><line x1="22" y1="34" x2="22" y2="72" stroke="#80bc94" stroke-width="2.5"/><path d="M22 34 Q15 26 15 15 Q15 5 22 7 Q29 5 29 15 Q29 26 22 34Z" fill="#c4e2fc" stroke="#6aa8e0" stroke-width="1.2"/><path d="M22 46 Q17 42 17 52" stroke="#80bc94" stroke-width="1.8" fill="none"/></svg>
+    <svg class="tl t3"   width="28" height="56" viewBox="0 0 44 72"><line x1="22" y1="36" x2="22" y2="72" stroke="#80bc94" stroke-width="2.5"/><path d="M22 36 Q15 28 15 17 Q15 7 22 9 Q29 7 29 17 Q29 28 22 36Z" fill="#8ec8f4" stroke="#6aa8e0" stroke-width="1.2"/><path d="M22 48 Q17 44 17 54" stroke="#80bc94" stroke-width="1.8" fill="none"/></svg>
+    <svg class="tl t2"   width="28" height="60" viewBox="0 0 44 72"><line x1="22" y1="34" x2="22" y2="72" stroke="#80bc94" stroke-width="2.5"/><path d="M22 34 Q15 26 15 15 Q15 5 22 7 Q29 5 29 15 Q29 26 22 34Z" fill="#b8defa" stroke="#6aa8e0" stroke-width="1.2"/><path d="M22 46 Q17 42 17 52" stroke="#80bc94" stroke-width="1.8" fill="none"/></svg>
+    <svg class="tl"      width="28" height="52" viewBox="0 0 44 72"><line x1="22" y1="38" x2="22" y2="72" stroke="#80bc94" stroke-width="2.5"/><path d="M22 38 Q15 30 15 19 Q15 9 22 11 Q29 9 29 19 Q29 30 22 38Z" fill="#d0ecfe" stroke="#6aa8e0" stroke-width="1.2"/><path d="M22 50 Q17 46 17 56" stroke="#80bc94" stroke-width="1.8" fill="none"/></svg>
+    <svg class="tl t3"   width="28" height="56" viewBox="0 0 44 72"><line x1="22" y1="36" x2="22" y2="72" stroke="#80bc94" stroke-width="2.5"/><path d="M22 36 Q15 28 15 17 Q15 7 22 9 Q29 7 29 17 Q29 28 22 36Z" fill="#a0d0f6" stroke="#6aa8e0" stroke-width="1.2"/><path d="M22 48 Q17 44 17 54" stroke="#80bc94" stroke-width="1.8" fill="none"/></svg>
+    <svg class="tl t2"   width="28" height="52" viewBox="0 0 44 72"><line x1="22" y1="38" x2="22" y2="72" stroke="#80bc94" stroke-width="2.5"/><path d="M22 38 Q15 30 15 19 Q15 9 22 11 Q29 9 29 19 Q29 30 22 38Z" fill="#bce0fc" stroke="#6aa8e0" stroke-width="1.2"/><path d="M22 50 Q17 46 17 56" stroke="#80bc94" stroke-width="1.8" fill="none"/></svg>
+    <svg class="tl"      width="28" height="64" viewBox="0 0 44 72"><line x1="22" y1="32" x2="22" y2="72" stroke="#80bc94" stroke-width="2.5"/><path d="M22 32 Q15 24 15 13 Q15 3 22 5 Q29 3 29 13 Q29 24 22 32Z" fill="#c8e6fc" stroke="#6aa8e0" stroke-width="1.2"/><path d="M22 44 Q17 40 17 50" stroke="#80bc94" stroke-width="1.8" fill="none"/></svg>
+    <svg class="tl t3"   width="28" height="52" viewBox="0 0 44 72"><line x1="22" y1="38" x2="22" y2="72" stroke="#80bc94" stroke-width="2.5"/><path d="M22 38 Q15 30 15 19 Q15 9 22 11 Q29 9 29 19 Q29 30 22 38Z" fill="#94c8f2" stroke="#6aa8e0" stroke-width="1.2"/><path d="M22 50 Q17 46 17 56" stroke="#80bc94" stroke-width="1.8" fill="none"/></svg>
+  </div>
+
+</div>
+
+<script>
+/* Sparkles */
+const sparkCont = document.getElementById('sparkles');
+for (let i = 0; i < 22; i++) {
+  const s = document.createElement('div');
+  s.className = 'sparkle';
+  s.style.cssText = `left:${Math.random()*100}vw;bottom:0;width:${2.5+Math.random()*4}px;height:${2.5+Math.random()*4}px;animation-duration:${9+Math.random()*12}s;animation-delay:${Math.random()*18}s`;
+  sparkCont.appendChild(s);
+}
+
+/* Scroll hint */
+const letterInner = document.getElementById('letterInner');
+const scrollHint  = document.getElementById('scrollHint');
+letterInner.addEventListener('scroll', () => {
+  const atBottom = letterInner.scrollHeight - letterInner.scrollTop <= letterInner.clientHeight + 8;
+  scrollHint.style.opacity = atBottom ? '0' : '';
+});
+
+/* Open logic */
+const envelopeWrap = document.getElementById('envelopeWrap');
+const seal         = document.getElementById('seal');
+const letterWrap   = document.getElementById('letterWrapper');
+const tapHint      = document.getElementById('tapHint');
+let opened = false;
+
+function openEnvelope() {
+  if (opened) return;
+  opened = true;
+  tapHint.classList.add('hide');
+  burstParticles(seal);
+  envelopeWrap.classList.add('open');
+  setTimeout(() => spawnButterflies(), 300);
+  setTimeout(() => letterWrap.classList.add('show'), 450);
+  seal.style.animation = 'none';
+  seal.style.cursor = 'default';
+}
+
+/* Particles */
+function burstParticles(el) {
+  const r  = el.getBoundingClientRect();
+  const cx = r.left + r.width  / 2;
+  const cy = r.top  + r.height / 2;
+  const colors = ['#5aaee0','#b0d8f5','#ffffff','#90c8f0','#c8e8fc','#d0f0ff','#a0ccf0'];
+  for (let i = 0; i < 22; i++) {
+    const p = document.createElement('div');
+    p.className = 'pt';
+    const angle = (i / 22) * Math.PI * 2;
+    const dist  = 55 + Math.random() * 70;
+    p.style.cssText = `left:${cx-5}px;top:${cy-5}px;background:${colors[i%colors.length]};--tx:translate(${Math.cos(angle)*dist}px,${Math.sin(angle)*dist}px);width:${5+Math.random()*8}px;height:${5+Math.random()*8}px;`;
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 950);
+  }
+}
+
+/* Butterflies */
+const BF_COLORS = [
+  ['#7abce8','#4a90d0','#b8dcf8'],
+  ['#90caf8','#5aaee0','#c8e8fc'],
+  ['#a0d0f8','#6ab4e8','#d0ecfe'],
+  ['#60a8d8','#3880b8','#a0ccf0'],
+];
+
+function spawnButterflies() {
+  const r  = envelopeWrap.getBoundingClientRect();
+  const cx = r.left + r.width  / 2;
+  const cy = r.top  + r.height / 2;
+  const count = 6 + Math.floor(Math.random() * 4);
+  for (let i = 0; i < count; i++) {
+    setTimeout(() => createButterfly(cx, cy), i * 130);
+  }
+}
+
+function createButterfly(sx, sy) {
+  const col  = BF_COLORS[Math.floor(Math.random() * BF_COLORS.length)];
+  const size = 22 + Math.random() * 20;
+  const dur  = 3.5 + Math.random() * 3;
+  const vx   = (Math.random() - 0.5) * window.innerWidth * 0.9;
+  const vy   = -(120 + Math.random() * 280);
+  const wobble = (Math.random() - 0.5) * 60;
+
+  const bf = document.createElement('div');
+  bf.className = 'butterfly';
+  bf.style.cssText = `left:${sx - size/2}px;top:${sy - size/2}px;width:${size}px;height:${size}px;`;
+
+  bf.innerHTML = `<svg viewBox="0 0 60 40" width="${size}" height="${size*0.66}" xmlns="http://www.w3.org/2000/svg">
+    <g class="bwing">
+      <ellipse cx="18" cy="14" rx="16" ry="11" fill="${col[0]}" opacity="0.9" transform="rotate(-18 18 14)"/>
+      <ellipse cx="16" cy="28" rx="12" ry="7"  fill="${col[1]}" opacity="0.85" transform="rotate(12 16 28)"/>
+      <ellipse cx="42" cy="14" rx="16" ry="11" fill="${col[0]}" opacity="0.9" transform="rotate(18 42 14)"/>
+      <ellipse cx="44" cy="28" rx="12" ry="7"  fill="${col[1]}" opacity="0.85" transform="rotate(-12 44 28)"/>
+      <ellipse cx="20" cy="13" rx="7" ry="4" fill="${col[2]}" opacity="0.45" transform="rotate(-18 20 13)"/>
+      <ellipse cx="40" cy="13" rx="7" ry="4" fill="${col[2]}" opacity="0.45" transform="rotate(18 40 13)"/>
+    </g>
+    <ellipse cx="30" cy="20" rx="2.5" ry="10" fill="#2a5f90" opacity="0.8"/>
+    <line x1="30" y1="10" x2="22" y2="2" stroke="#2a5f90" stroke-width="1" opacity="0.7"/>
+    <line x1="30" y1="10" x2="38" y2="2" stroke="#2a5f90" stroke-width="1" opacity="0.7"/>
+    <circle cx="22" cy="2" r="1.5" fill="#5aaee0" opacity="0.8"/>
+    <circle cx="38" cy="2" r="1.5" fill="#5aaee0" opacity="0.8"/>
+  </svg>`;
+
+  document.body.appendChild(bf);
+
+  let start = null;
+  function frame(ts) {
+    if (!start) start = ts;
+    const prog = Math.min((ts - start) / (dur * 1000), 1);
+    const ease = prog < 0.5 ? 2*prog*prog : 1 - Math.pow(-2*prog+2,2)/2;
+    const x = sx - size/2 + vx * ease + Math.sin(prog * Math.PI * 4) * wobble;
+    const y = sy - size/2 + vy * ease + Math.sin(prog * Math.PI * 2) * 40;
+    const rot = Math.sin(prog * Math.PI * 6) * 18;
+    bf.style.left = x + 'px';
+    bf.style.top  = y + 'px';
+    bf.style.transform = `rotate(${rot}deg)`;
+    bf.style.opacity = prog < 0.08 ? prog / 0.08 : prog > 0.88 ? (1 - prog) / 0.12 : 1;
+    if (prog < 1) requestAnimationFrame(frame);
+    else bf.remove();
+  }
+  requestAnimationFrame(frame);
+}
+</script>
+</body>
+</html>
